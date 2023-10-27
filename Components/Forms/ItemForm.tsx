@@ -16,7 +16,7 @@ interface Props {
     label: string,
     icon: string,
     password: boolean,
-    value:any | null,
+    value?:any,
     setValue:(value: any) => void ,
     placeholder: string
 }

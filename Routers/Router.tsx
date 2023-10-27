@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import Register from "../View/Register";
 import Settings from "../View/Settings";
 import Header from "../Components/Construction/Header";
+
 const Tab = createBottomTabNavigator();
 interface Props {
     setLogged: (value: boolean) => void

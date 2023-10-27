@@ -14,14 +14,15 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  View
+  View,
 } from 'react-native';
 
 import ItemForm from '../Components/Forms/ItemForm';
 import Buttons from '../Components/Buttons/Buttons';
 import User from '../Class/User';
 import { DataBaseLocal } from '../Class/DataBaseLocal';
-import Modal from '../Components/Construction/Modal';
+import ModalMessage from '../Components/Construction/Modal';
+
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -43,29 +44,29 @@ export default function Login(props: Props): JSX.Element {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.divView}>
-        <Section title="Login Channarong App">
-          <ItemForm value={null} setValue={(e) => user.setName(e)} placeholder="Digite seu usuários." password={false} label="Login:" icon="user-circle" />
-          <ItemForm value={null} setValue={(e) => user.setPassword(e)} placeholder="Digite sua senha." password={true} label="Senha:" icon="lock" />
-          <Buttons
-            typeButton="success"
-            title={'Login'}
-            color="white"
-            icon={null}
-            size={RFPercentage(3.6)}
-            actionButton={async () => {
-              try {
-                let newUser = await getUser(user);
-                if (newUser.error) throw new Error(newUser.message);
-                props.setLogged(true);
-              } catch (error: any) {
-                let messageErr = error.toString();
-                Modal({
-                  title: 'Erro!',
-                  message: messageErr.includes('Error: ') ? messageErr.split('Error: ')[1] : messageErr,
-                });
-              }
-            }} />
-        </Section>
+          <Section title="Login Channarong App">
+            <ItemForm setValue={(e) => user.setName(e)} placeholder="Digite seu usuários." password={false} label="Login:" icon="user-circle" />
+            <ItemForm setValue={(e) => user.setPassword(e)} placeholder="Digite sua senha." password={true} label="Senha:" icon="lock" />
+            <Buttons
+              typeButton="success"
+              title={'Login'}
+              color="white"
+              icon={null}
+              size={RFPercentage(3.6)}
+              actionButton={async () => {
+                try {
+                  let newUser = await getUser(user);
+                  if (newUser.error) throw new Error(newUser.message);
+                  props.setLogged(true);
+                } catch (error: any) {
+                  let messageErr = error.toString();
+                  ModalMessage({
+                    title: 'Erro!',
+                    message: messageErr.includes('Error: ') ? messageErr.split('Error: ')[1] : messageErr,
+                  });
+                }
+              }} />
+          </Section>
       </View>
     </SafeAreaView>
   );
@@ -75,7 +76,7 @@ async function getUser(user: User): Promise<{ error: boolean; data: []; message:
   let result: { error: boolean, data: [], message: string } = { error: false, data: [], message: '' };
   try {
     let db = new DataBaseLocal();
-    let list = await db.fetchData('data');
+    let list = await db.fetchData('user');
     let filtered: any = list.data.filter(item => item.user.toLocaleUpperCase() === user.getName().toLocaleUpperCase() && item.password === user.getPassword());
     if (filtered.length === 0) { throw new Error('Usuário ou senha incorretos'); }
     result.data = filtered;
@@ -112,5 +113,4 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: RFPercentage(2.8),
   },
-
 });

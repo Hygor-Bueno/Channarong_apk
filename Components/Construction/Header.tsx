@@ -31,19 +31,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent:'space-between',
         alignItems:'center',
-        flexGrow: 0.05,
         backgroundColor: '#121212',
         width: '100%',
-        paddingHorizontal: RFPercentage(2),
     },
     viewTitle:{
-        width: '88%'
+        width: '84%',
     },
     viewImg:{
         display:'flex',
         alignItems: 'flex-end',
         justifyContent: 'center',
-        width: '12%',
+        width: '16%',
     },
     HeaderTitle: {
         fontSize: RFPercentage(4),

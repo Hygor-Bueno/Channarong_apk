@@ -9,7 +9,7 @@ type ModalProps = {
 };
 
 
-export default function Modal(props: ModalProps) {
+export default function ModalMessage(props: ModalProps) {
     Alert.alert(
         props.title,
         props.message,
