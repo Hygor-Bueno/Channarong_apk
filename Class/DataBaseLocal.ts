@@ -24,7 +24,7 @@ export class DataBaseLocal {
         return result;
     }
 
-    private async storeData(dataBase: string,newData:any): Promise<void> {
+    private async storeData(dataBase: string, newData: any): Promise<void> {
         try {
             const storedData = await AsyncStorage.getItem(dataBase);
             let data = [];
@@ -41,14 +41,30 @@ export class DataBaseLocal {
     async createUser(user: string, password: string, dataBase: string, admin: boolean, status: boolean): Promise<void> {
         this.counter = await this.lastId(dataBase);
         const newItem: IUser = { id: this.counter, user, password, admin, status };
-        await this.storeData(dataBase,newItem);
+        await this.storeData(dataBase, newItem);
     }
     async createPupil(name: string, payment_date: string, dataBase: string, free: boolean, status: number): Promise<void> {
         this.counter = await this.lastId(dataBase);
         const newItem: IPupil = { id: this.counter, name, payment_date, free, status };
-        await this.storeData(dataBase,newItem);
+        await this.storeData(dataBase, newItem);
     }
-
+    async updatePupil(pupil: IPupil, dataBase: string): Promise<void> {
+        try {
+            let req: IRequest = await this.fetchData(dataBase);
+            if (req.error) {
+                throw new Error(req.message);
+            }
+            req.data.forEach((item: IPupil, index: number) => {
+                if (item.id === pupil.id) {
+                    req.data[index] = pupil;
+                }
+            });
+            await AsyncStorage.setItem(dataBase, JSON.stringify(req.data));
+            await this.fetchData(dataBase);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     async lastId(dataBase: string): Promise<number> {
         let result: number = 0;
         let req: IRequest = await this.fetchData(dataBase);

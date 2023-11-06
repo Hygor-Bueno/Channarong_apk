@@ -29,7 +29,7 @@ export interface ISettings{
 export interface IRequest{ 
     error: boolean;
     message: string;
-    data: any[]; 
+    data: any[];
 }
 
 export interface IModalPupil{

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 export default class Util {
-    toDay(): string {
-        const currentDate = new Date();
+    dbDate(date?:Date): string {
+        const currentDate = date || new Date();
 
         const year = currentDate.getFullYear();
         const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
@@ -14,6 +14,7 @@ export default class Util {
         const newDate: string[] = date.split('-');
         return `${newDate[2]}/${newDate[1]}/${newDate[0]}`;
     }
+   
 }
 
 /*

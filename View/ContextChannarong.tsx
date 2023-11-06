@@ -5,6 +5,7 @@ import type { PropsWithChildren } from 'react';
 import { IPupil } from '../Interfaces/iDataBaseLocal';
 import { DataBaseLocal } from '../Class/DataBaseLocal';
 import Util from '../Util/util';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface IChannarongContext {
     listPupil: IPupil[];
@@ -28,20 +29,26 @@ export default function ChannarongProvider(props: Props) {
             let db = new DataBaseLocal();
             let reqPupil = await db.fetchData('pupil');
             if (!reqPupil.error) {
-                setListPupil(validatePayments(reqPupil.data));
+                let list = validatePayments(reqPupil.data);
+                setListPupil(list);
+                updateList(list);
             }
         }
 
         function validatePayments(list: IPupil[]) {
             const util = new Util();
-            let date = util.toDay();
+            let date = util.dbDate();
             list.forEach((pupil: IPupil) => {
                 if (pupil.payment_date < date) {
                     pupil.status = 2;
                 }
             });
             return list;
-        };
+        }
+
+        async function updateList(datas: IPupil[]) {
+            await AsyncStorage.setItem('pupil', JSON.stringify(datas));
+        }
 
         init();
     }, []);

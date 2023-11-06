@@ -11,8 +11,8 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'react-native';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUserCircle, faLock, faHome, faUsers, faGears, faGear, faCircleCheck,faCircleExclamation,faCircleXmark,faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-library.add(faUserCircle, faLock, faHome, faUsers, faGears, faGear, faCircleCheck,faCircleExclamation,faCircleXmark,faArrowRightFromBracket);
+import { faUserCircle, faLock, faHome, faUsers, faGears, faGear, faCircleCheck,faCircleExclamation,faCircleXmark,faArrowRightFromBracket, faCalendarDay,faSquare,faSquareCheck, faSackDollar, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+library.add(faUserCircle, faLock, faHome, faUsers, faGears, faGear, faCircleCheck,faCircleExclamation,faCircleXmark,faArrowRightFromBracket, faCalendarDay,faSquare,faSquareCheck, faSackDollar, faFloppyDisk);
 
 import Login from './View/Login';
 import { DataBaseLocal } from './Class/DataBaseLocal';

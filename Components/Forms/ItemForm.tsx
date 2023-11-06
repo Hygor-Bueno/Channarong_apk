@@ -11,14 +11,16 @@ import {
     StyleSheet
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface Props {
     label: string,
-    icon: string,
+    icon: IconProp,
     password: boolean,
     value?:any,
     setValue:(value: any) => void ,
-    placeholder: string
+    placeholder: string,
+    isNumeric?: boolean,
 }
 
 export default function ItemForm(props: Props): JSX.Element {
@@ -34,6 +36,7 @@ export default function ItemForm(props: Props): JSX.Element {
                 secureTextEntry={props.password}
                 value={props.value}
                 onChangeText={props.setValue}
+                keyboardType={props.isNumeric ? "numeric":"default"}
             />
         </SafeAreaView>
     );
@@ -45,7 +48,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         width: '100%',
-        padding: 10
+        marginVertical:RFPercentage(1.2)
     },
     text: {
         fontSize: RFPercentage(3.8),
@@ -56,6 +59,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: RFPercentage(1.2),
         borderWidth: RFPercentage(0.2),
-        borderColor: '#ccc'
+        borderColor: '#ccc',
+        fontSize:RFPercentage(2.8),
+        color:'#444'
     }
 });
