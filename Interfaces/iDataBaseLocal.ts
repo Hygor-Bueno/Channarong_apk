@@ -34,6 +34,7 @@ export interface IRequest{
 
 export interface IModalPupil{
     viewHeader:boolean;
+    addItem?:boolean;
     onClose:()=>void;
     pupil:IPupil;
 }

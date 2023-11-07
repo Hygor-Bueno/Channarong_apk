@@ -7,7 +7,6 @@
  */
 
 import { RFPercentage } from 'react-native-responsive-fontsize';
-
 import React, { useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
@@ -20,9 +19,9 @@ import {
 } from 'react-native';
 import { useChannarongContext } from './ContextChannarong';
 import { IModalPupil, IPupil } from '../Interfaces/iDataBaseLocal';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Util from '../Util/util';
 import AlterPupil from '../Components/Pupil/AlterPupil';
+import blockData, { filterColorStatus, filterStatus } from '../Components/Pupil/Pupils';
 
 type SectionProps = PropsWithChildren<{
     title: string;
@@ -48,12 +47,12 @@ export default function Home(): JSX.Element {
         </View>
     );
 }
-export function RenderListPupil(props: { list: IPupil[] }): JSX.Element {
+function RenderListPupil(props: { list: IPupil[] }): JSX.Element {
     const [alterPupil, setAlterPupil] = useState<IPupil>({ id: 0, name: '', free: false, status: 0, payment_date: '' });
     const [modalVisible, setModalVisible] = useState(false);
     let configModal: IModalPupil = { onClose: () => setModalVisible(false), pupil: alterPupil, viewHeader: false };
     return (
-        <View>
+        <View style={{display:'flex',height:'90%'}}>
             <Modal
                 animationType="slide"
                 transparent={false}
@@ -93,59 +92,6 @@ export function RenderListPupil(props: { list: IPupil[] }): JSX.Element {
             </TouchableOpacity>
         );
     }
-
-    function blockData(label: string, value: any, widthPercent: number, icon?: boolean, colorIcon?: string): JSX.Element {
-        let styleBlock = StyleSheet.create({
-            container: {
-                width: `${widthPercent}%`,
-                // backgroundColor: 'red'
-            },
-        });
-        return (
-            <View style={styleBlock.container}>
-                <Text style={styles.label}>{label}</Text>
-                <View style={icon && { display: 'flex', alignItems: 'center' }}>
-                    {icon ? <FontAwesomeIcon color={colorIcon ? colorIcon : 'black'} icon={value} /> : <Text>{value}</Text>}
-                </View>
-            </View>
-        );
-    }
-    function filterStatus(staus: number): string {
-        //faCircleCheck,faCircleExclamation,circle-xmark
-        let result: string = '';
-        switch (staus) {
-            case 0:
-                result = 'circle-xmark';
-                break;
-            case 1:
-                result = 'circle-check';
-                break;
-            case 2:
-                result = 'circle-exclamation';
-                break;
-            default:
-                break;
-        }
-        return result;
-    }
-    function filterColorStatus(staus: number): string {
-        //faCircleCheck,faCircleExclamation,circle-xmark
-        let result: string = '';
-        switch (staus) {
-            case 0:
-                result = 'red';
-                break;
-            case 1:
-                result = 'green';
-                break;
-            case 2:
-                result = 'orange';
-                break;
-            default:
-                break;
-        }
-        return result;
-    }
 }
 
 const styles = StyleSheet.create({
@@ -153,7 +99,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        flexGrow: 1,
+        height:'86%',
     },
     sectionContainer: {
         display: 'flex',
@@ -165,6 +111,7 @@ const styles = StyleSheet.create({
     },
     sectionTitle: {
         fontSize: RFPercentage(2.8),
+        height:'10%'
     },
     label: {
         fontWeight: 'bold',
@@ -183,5 +130,5 @@ const styles = StyleSheet.create({
         padding: RFPercentage(1),
         borderColor: '#aaa',
         borderRadius: RFPercentage(1),
-    }
+    },
 })

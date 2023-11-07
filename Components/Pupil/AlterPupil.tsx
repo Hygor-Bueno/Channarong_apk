@@ -71,26 +71,44 @@ export default function AlterPupil(props: IModalPupil): JSX.Element {
             </View>
 
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: RFPercentage(1), marginVertical: RFPercentage(4) }}>
-                <TouchableOpacity style={{ ...styles.buttonsFooter, backgroundColor: '#218838' }} onPress={async () =>bntUpdate()}>
-                    <FontAwesomeIcon size={RFPercentage(4)} color={'white'} icon={'floppy-disk'} />
-                </TouchableOpacity>
-                <TouchableOpacity style={{ ...styles.buttonsFooter, backgroundColor: '#BF930D' }} onPress={async () => { paymentButton()}}>
-                    <FontAwesomeIcon size={RFPercentage(4)} color={'white'} icon={'sack-dollar'} />
-                </TouchableOpacity>
+
+                {props.addItem ?
+                    <TouchableOpacity style={{ ...styles.buttonsFooter, backgroundColor: '#218838' }} onPress={async () => await bntInsert()}>
+                        <FontAwesomeIcon size={RFPercentage(4)} color={'white'} icon={'plus-circle'} />
+                    </TouchableOpacity>
+                    :
+                    <React.Fragment>
+                        <TouchableOpacity style={{ ...styles.buttonsFooter, backgroundColor: '#218838' }} onPress={async () => await bntUpdate()}>
+                            <FontAwesomeIcon size={RFPercentage(4)} color={'white'} icon={'floppy-disk'} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{ ...styles.buttonsFooter, backgroundColor: '#BF930D' }} onPress={async () => { paymentButton() }}>
+                            <FontAwesomeIcon size={RFPercentage(4)} color={'white'} icon={'sack-dollar'} />
+                        </TouchableOpacity>
+                    </React.Fragment>
+                }
             </View>
         </View>
     );
-    async function bntUpdate(){
-        let changePupil: IPupil = {
+    function buildPupil(): IPupil {
+        let newPupil: IPupil = {
             id: props.pupil.id,
             name: name,
             payment_date: `${year}-${month}-${day}`,
             free: free,
-            status: validateStatus(status,`${year}-${month}-${day}`),
+            status: validateStatus(status, `${year}-${month}-${day}`),
         };
-        updatePupil(changePupil);
+        return newPupil;
     }
-    async function paymentButton(){
+    async function bntUpdate() {
+        let changePupil: IPupil = buildPupil();
+        await updatePupil(changePupil);
+    }
+
+    async function bntInsert() {
+        let postPupil: IPupil = buildPupil();
+        await insertPupil(postPupil);
+    }
+    async function paymentButton() {
         let util = new Util();
         let newPayment = new Date(`${year}-${month}-${day}`);
         newPayment.setMonth(newPayment.getMonth() + 1);
@@ -99,9 +117,22 @@ export default function AlterPupil(props: IModalPupil): JSX.Element {
             name: name,
             payment_date: util.dbDate(newPayment),
             free: free,
-            status: validateStatus(status,util.dbDate(newPayment)),
+            status: validateStatus(status, util.dbDate(newPayment)),
         };
         updatePupil(changePupil);
+    }
+
+    async function insertPupil(object: IPupil) {
+        try {
+            let dbLocal = new DataBaseLocal();
+            await dbLocal.createPupil(object.name, object.payment_date, 'pupil', object.free, object.status);
+            let reqUser = await dbLocal.fetchData('pupil');
+            if (reqUser.error) { throw new Error(reqUser.message); }
+            setListPupil([...reqUser.data]);
+            props.onClose();
+        } catch (error) {
+            console.log(error);
+        }
     }
     async function updatePupil(object: IPupil) {
         try {
@@ -122,11 +153,11 @@ export default function AlterPupil(props: IModalPupil): JSX.Element {
         }
         return response;
     }
-    function validateStatus(statusCode: number,payment_date: string): number {
+    function validateStatus(statusCode: number, payment_date: string): number {
         let result: number = statusCode;
         if (result !== 0) {
             const util = new Util();
-            result = util.dbDate() <= payment_date ?  1 :  2;
+            result = util.dbDate() <= payment_date ? 1 : 2;
         }
         return result;
     }

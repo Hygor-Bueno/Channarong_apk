@@ -39,7 +39,7 @@ export default function ChannarongProvider(props: Props) {
             const util = new Util();
             let date = util.dbDate();
             list.forEach((pupil: IPupil) => {
-                if (pupil.payment_date < date) {
+                if (pupil.payment_date < date && pupil.status !== 0) {
                     pupil.status = 2;
                 }
             });

@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         backgroundColor: '#121212',
         width: '100%',
+        height:'14%',
     },
     viewTitle:{
         width: '84%',
@@ -42,6 +43,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'center',
         width: '16%',
+        height: '100%',
     },
     HeaderTitle: {
         fontSize: RFPercentage(4),
